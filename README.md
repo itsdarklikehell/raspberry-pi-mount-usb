@@ -1,8 +1,10 @@
-# raspberry-pi-mount-usb
+## raspberry-pi-mount-usb
 Properly Mount USB Storage on Raspberry Pi
-bin/bash
-#Properly Mount USB Storage on Raspberry Pi
-#raspberry-pi-mount-usb.sh made by itsdarklikehell
+
+
+#!/bin/bash
+# Properly Mount USB Storage on Raspberry Pi
+raspberry-pi-mount-usb.sh made by itsdarklikehell
 
 echo 'This script properly mount storage drives on Minibian, Raspbian and Raspbmc. Many guides use a simpler, less robust method that can cause issues if you use multiple USB storage devices. I will walk you through mounting USB sticks and USB hard drives on your Raspberry Pi running Raspbian. This will enable you to use your external USB storage for media, games or whatever your Pi’s heart desires for Kodi (XBMC) or a home media server.'
 

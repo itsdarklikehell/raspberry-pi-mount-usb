@@ -3,31 +3,29 @@
 #raspberry-pi-mount-usb.sh made by rizzo
 
 echo 'This script properly mount storage drives on Minibian, Raspbian and Raspbmc. Many guides use a simpler, less robust method that can cause issues if you use multiple USB storage devices. I will walk you through mounting USB sticks and USB hard drives on your Raspberry Pi running Raspbian. This will enable you to use your external USB storage for media, games or whatever your Pi’s heart desires for Kodi (XBMC) or a home media server.'
-
-#Updated for Raspbian Jessie with nofail to prevent system halts for systemd so your hard drive being absent will not stop the boot sequence on your Raspberry Pi.
-
-#Updated  January 5th, 2016 to set future permissions (thanks manne!)
-
+echo ''
+echo 'Updated for Raspbian Jessie with nofail to prevent system halts for systemd so your hard drive being absent will not stop the boot sequence on your Raspberry Pi.'
+echo ''
+echo 'Updated  January 5th, 2016 to set future permissions (thanks manne!)'
+echo ''
 #If you are trying to figure out which hardware would work best for you, consider reading the Pi benchmarks.
-
-#Mount External USB Hard Drive on Raspberry Pi
+echo ''
+echo 'Mount External USB Hard Drive on Raspberry Pi'
 #I am assuming you only have 1 external hard drive connected to the Pi. If so then it should be attached to /dev/sda1 – additional drives will use /dev/sdb1 and /dev/sdc1 etc.  If you have multiple external hard drives you will need separate mount points for each drive (e.g. /mnt/usbstorage1 and /mnt/usbstorage2).
 
 #See hard drive deals on Amazon. Remember you can power a 2.5″ hard drive with a model B+ and Raspberry Pi 2.
 
-#Prepare the Mount Point
-#First make a directory in which to mount the USB drive
+echo 'Prepare the Mount Point'
+echo 'First make a directory in which to mount the USB drive'
 
 sudo mkdir /mnt/usbstorage
-#Make pi the owner of the mounted drive and make its permissions read, write and execute for it
+echo 'Make pi the owner of the mounted drive and make its permissions read, write and execute for it'
 sudo chown -R pi:pi /mnt/usbstorage
 sudo chmod -R 775 /mnt/usbstorage
-
-#Set all future permissions for the mount point to pi user and group
+echo 'Set all future permissions for the mount point to pi user and group'
 sudo setfacl -Rdm g:pi:rwx /mnt/usbstorage
 sudo setfacl -Rm g:pi:rwx /mnt/usbstorage
-
-#Determine the USB Hard Drive Format
+echo 'Determine the USB Hard Drive Format'
 #You also need to know the file system the drive is formatted with
 sudo blkid
 
