@@ -90,7 +90,7 @@ echo 'Add the line in red to the bottom, replace XXXX-XXXX with your UUID and ex
 #/dev/mmcblk0p1 /boot vfat defaults 0 2
 #/dev/mmcblk0p2 / ext4 errors=remount-ro,noatime 0 1
 
-#UUID=XXXX-XXXX  $MNTPOINT$DRVNAME exfat   nofail,uid=pi,gid=pi   0   0
+#UUID=81E5-890D  $MNTPOINT$DRVNAME exfat   nofail,uid=pi,gid=pi   0   0
 
 
 #for NTFS, note that it is ntfs and not ntfs-3g
@@ -98,13 +98,13 @@ echo 'Add the line in red to the bottom, replace XXXX-XXXX with your UUID and ex
 #/dev/mmcblk0p1 /boot vfat defaults 0 2
 #/dev/mmcblk0p2 / ext4 errors=remount-ro,noatime 0 1
 
-#UUID=XXXX-XXXX    $MNTPOINT$DRVNAME    ntfs   nofail,uid=pi,gid=pi    0   0
+#UUID=81E5-890D    $MNTPOINT$DRVNAME    ntfs   nofail,uid=pi,gid=pi    0   0
 #for ext4 using uid and gid is not recommended so use at your own risk as it could cause issues (thanks mk2soldier).
 
 #/dev/mmcblk0p1 /boot vfat defaults 0 2
 #/dev/mmcblk0p2 / ext4 errors=remount-ro,noatime 0 1
 
-#UUID=XXXX-XXXX    $MNTPOINT$DRVNAME    ext4   nofail,uid=pi,gid=pi    0   0
+#UUID=81E5-890D    $MNTPOINT$DRVNAME    ext4   nofail,uid=pi,gid=pi    0   0
 
 
 echo 'If you get any errors you can replace uid=pi,gid=pi with defaults or remove it entirely'
@@ -112,7 +112,7 @@ echo 'If you get any errors you can replace uid=pi,gid=pi with defaults or remov
 #/dev/mmcblk0p1 /boot vfat defaults 0 2
 #/dev/mmcblk0p2 / ext4 errors=remount-ro,noatime 0 1
 
-#UUID=XXXX-XXXX    $MNTPOINT$DRVNAME    ext4   nofail,defaults    0   0
+#UUID=81E5-890D    $MNTPOINT$DRVNAME    ext4   nofail,defaults    0   0
 
 
 #For using $DEVNAME and defaults if you have troubles with UUID
