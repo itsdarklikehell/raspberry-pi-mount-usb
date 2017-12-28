@@ -1,4 +1,8 @@
 #!/bin/bash
+MNTPOINT=/mnt
+DRVNAME=/usbstorage
+DRVNAME2=/usbstorage2
+DEVNAME=/dev/sda1
 
 #Properly Mount USB Storage on Raspberry Pi
 #raspberry-pi-mount-usb.sh made by rizzo
@@ -12,20 +16,20 @@ echo ''
 #If you are trying to figure out which hardware would work best for you, consider reading the Pi benchmarks.
 echo ''
 echo 'Mount External USB Hard Drive on Raspberry Pi'
-#I am assuming you only have 1 external hard drive connected to the Pi. If so then it should be attached to /dev/sda1 – additional drives will use /dev/sdb1 and /dev/sdc1 etc.  If you have multiple external hard drives you will need separate mount points for each drive (e.g. /mnt/usbstorage1 and /mnt/usbstorage2).
+#I am assuming you only have 1 external hard drive connected to the Pi. If so then it should be attached to $DEVNAME – additional drives will use /dev/sdb1 and /dev/sdc1 etc.  If you have multiple external hard drives you will need separate mount points for each drive (e.g. $MNTPOINT$DRVNAME1 and $MNTPOINT$DRVNAME2).
 
 #See hard drive deals on Amazon. Remember you can power a 2.5″ hard drive with a model B+ and Raspberry Pi 2.
 
 echo 'Prepare the Mount Point'
 echo 'First make a directory in which to mount the USB drive'
 
-sudo mkdir /mnt/usbstorage
+sudo mkdir $MNTPOINT$DRVNAME
 echo 'Make pi the owner of the mounted drive and make its permissions read, write and execute for it'
-sudo chown -R pi:pi /mnt/usbstorage
-sudo chmod -R 775 /mnt/usbstorage
+sudo chown -R pi:pi $MNTPOINT$DRVNAME
+sudo chmod -R 775 $MNTPOINT$DRVNAME
 echo 'Set all future permissions for the mount point to pi user and group'
-sudo setfacl -Rdm g:pi:rwx /mnt/usbstorage
-sudo setfacl -Rm g:pi:rwx /mnt/usbstorage
+sudo setfacl -Rdm g:pi:rwx $MNTPOINT$DRVNAME
+sudo setfacl -Rm g:pi:rwx $MNTPOINT$DRVNAME
 echo 'Determine the USB Hard Drive Format'
 #You also need to know the file system the drive is formatted with
 sudo blkid
@@ -34,7 +38,7 @@ sudo blkid
 
 #/dev/mmcblk0p1: SEC_TYPE="msdos" LABEL="boot" UUID="787C-2FD4" TYPE="vfat"
 #/dev/mmcblk0p2: UUID="3d81d9e2-7d1b-4015-8c2c-29ec0875f762" TYPE="ext4"
-#/dev/sda1: LABEL="HTPCGuides" UUID="BA8F-FFE8" TYPE="exfat"
+#$DEVNAME: LABEL="HTPCGuides" UUID="BA8F-FFE8" TYPE="exfat"
 
 echo 'Update your repositories if your hard drive is anything but ext4 as the TYPE above'
 sudo apt-get update && sudo apt-get upgrade -y
@@ -48,13 +52,14 @@ echo 'If the drive is exfat install these utilities'
 sudo apt-get install exfat-utils -y
 
 echo 'For all drive types mount the usb with this command, -o insures pi is the owner which should avoid permission issues'
-sudo mount -o uid=pi,gid=pi /dev/sda1 /mnt/usbstorage
+
+###### sudo mount -o uid=pi,gid=pi $DEVNAME $MNTPOINT$DRVNAME
 
 #If you get an error use this syntax:
-#sudo mount -t uid=pi,gid=pi /dev/sda1 /mnt/usbstorage
+#sudo mount -t uid=pi,gid=pi $DEVNAME $MNTPOINT$DRVNAME
 
 #If the mount -t command returns an error then use this syntax:
-#sudo mount uid=pi,gid=pi /dev/sda1 /mnt/usbstorage
+#sudo mount uid=pi,gid=pi $DEVNAME $MNTPOINT$DRVNAME
 
 echo 'If you are getting this drive is already mounted errors then you are probably using a distro which automounts the drives which you can either continue using but then you should remove the /etc/fstab entries. You will have to uninstall the automounting software if you want to mount using the method in this script.'
 
@@ -63,7 +68,7 @@ echo 'If you are getting this drive is already mounted errors then you are proba
 
 
 echo 'Automount the USB Hard Drive on Boot'
-echo '/mnt/usbstorage will be the folder in which you store your media. We want it to be automounted on boot The best way to do this is through the UUID.'
+echo '$MNTPOINT$DRVNAME will be the folder in which you store your media. We want it to be automounted on boot The best way to do this is through the UUID.'
 
 echo 'Get the UUID by using this commmand:'
 sudo ls -l /dev/disk/by-uuid/
@@ -77,7 +82,7 @@ echo 'Add the line in red to the bottom, replace XXXX-XXXX with your UUID and ex
 
 #The umask 0002 sets 775 permissions so the pi user and group can read, write and execute files on the external USB drive. To completely eliminate permission issues you can set the umask to 0000 which equals 777 permissions so anybody can read, write and execute. Note that 777 permissions are considered a security risk.
 
-#If you have issues here then try replacing uid=pi,gid=pi with just the word defaults (typical for ext4). You can also try replacing the UUID with the /dev/sda1 line.
+#If you have issues here then try replacing uid=pi,gid=pi with just the word defaults (typical for ext4). You can also try replacing the UUID with the $DEVNAME line.
 
 
 #This is an example for exfat
@@ -85,7 +90,7 @@ echo 'Add the line in red to the bottom, replace XXXX-XXXX with your UUID and ex
 #/dev/mmcblk0p1 /boot vfat defaults 0 2
 #/dev/mmcblk0p2 / ext4 errors=remount-ro,noatime 0 1
 
-#UUID=XXXX-XXXX  /mnt/usbstorage exfat   nofail,uid=pi,gid=pi   0   0
+#UUID=XXXX-XXXX  $MNTPOINT$DRVNAME exfat   nofail,uid=pi,gid=pi   0   0
 
 
 #for NTFS, note that it is ntfs and not ntfs-3g
@@ -93,13 +98,13 @@ echo 'Add the line in red to the bottom, replace XXXX-XXXX with your UUID and ex
 #/dev/mmcblk0p1 /boot vfat defaults 0 2
 #/dev/mmcblk0p2 / ext4 errors=remount-ro,noatime 0 1
 
-#UUID=XXXX-XXXX    /mnt/usbstorage    ntfs   nofail,uid=pi,gid=pi    0   0
+#UUID=XXXX-XXXX    $MNTPOINT$DRVNAME    ntfs   nofail,uid=pi,gid=pi    0   0
 #for ext4 using uid and gid is not recommended so use at your own risk as it could cause issues (thanks mk2soldier).
 
 #/dev/mmcblk0p1 /boot vfat defaults 0 2
 #/dev/mmcblk0p2 / ext4 errors=remount-ro,noatime 0 1
 
-#UUID=XXXX-XXXX    /mnt/usbstorage    ext4   nofail,uid=pi,gid=pi    0   0
+#UUID=XXXX-XXXX    $MNTPOINT$DRVNAME    ext4   nofail,uid=pi,gid=pi    0   0
 
 
 echo 'If you get any errors you can replace uid=pi,gid=pi with defaults or remove it entirely'
@@ -107,15 +112,15 @@ echo 'If you get any errors you can replace uid=pi,gid=pi with defaults or remov
 #/dev/mmcblk0p1 /boot vfat defaults 0 2
 #/dev/mmcblk0p2 / ext4 errors=remount-ro,noatime 0 1
 
-#UUID=XXXX-XXXX    /mnt/usbstorage    ext4   nofail,defaults    0   0
+#UUID=XXXX-XXXX    $MNTPOINT$DRVNAME    ext4   nofail,defaults    0   0
 
 
-#For using /dev/sda1 and defaults if you have troubles with UUID
+#For using $DEVNAME and defaults if you have troubles with UUID
 
 #/dev/mmcblk0p1 /boot vfat defaults 0 2
 #/dev/mmcblk0p2 / ext4 errors=remount-ro,noatime 0 1
 
-#/dev/sda1    /mnt/usbstorage    ext4   nofail    0   0
+#$DEVNAME    $MNTPOINT$DRVNAME    ext4   nofail    0   0
 echo 'Now test the fstab file works'
 
 sudo mount -a
@@ -125,13 +130,13 @@ echo 'then try mount -a again until it succeeds'
 
 echo 'You should be able to access the mounted USB drive and list its contents'
 
-cd /mnt/usbstorage
+cd $MNTPOINT$DRVNAME
 ls
 echo 'Every time you reboot, the drives will be mounted as long as the UUID remains the same. If you delete the partitions or format the USB hard drive or stick the UUID changes so bear this in mind. You can always repeat the process for additional hard drives in the future.'
 
 echo 'Now you can manage the hard drive power using these guides since it will not spin down automatically on Linux'
 
-echo 'If you have multiple hard drives you will have to make separate mount points (e.g. /mnt/usbstorage2) for each drive’s partition'
+echo 'If you have multiple hard drives you will have to make separate mount points (e.g. $MNTPOINT$DRVNAME2) for each drive’s partition'
 
 echo 'Fix Raspberry Pi 2 Mounting Issues'
 echo 'Thanks to Jake for bringing this to my attention.'
