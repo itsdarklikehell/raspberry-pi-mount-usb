@@ -1,6 +1,14 @@
 ## raspberry-pi-mount-usb
 Properly Mount USB Storage on Raspberry Pi
 
+---
+
+## 🎥 Gource Visualization
+
+De ontwikkelhistorie van dit project in een film:
+
+<video src="https://raw.githubusercontent.com/itsdarklikehell/raspberry-pi-mount-usb/master/gource.mp4" controls width="100%"></video>
+
 
 #!/bin/bash
 # Properly Mount USB Storage on Raspberry Pi
