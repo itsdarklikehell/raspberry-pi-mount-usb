@@ -1,4 +1,20 @@
 #!/bin/bash
+
+set -euo pipefail
+
+# Logging
+LOG_FILE="${LOG_FILE:-/tmp/raspberry-pi-mount-usb.log}"
+log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" | tee -a "$LOG_FILE"; }
+
+# DRY_RUN guard
+DRY_RUN="${DRY_RUN:-}"
+maybe_mutate() {
+  if [ -n "$DRY_RUN" ]; then
+    log "  [DRY-RUN] Would: $*"
+    return 0
+  fi
+  "$@"
+}
 MNTPOINT=/mnt
 DRVNAME=/usbstorage
 DRVNAME2=/usbstorage2
