@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 MNTPOINT=/mnt
 DRVNAME=/usbstorage
 DRVNAME2=/usbstorage2
